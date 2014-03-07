@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+	</script>
+	<script>
+		var keypress_times = [];
+		var betweenkeys_times = [];
+		var start_time;
+		function start() {
+			var start = new Date();
+			if(start_time < start && start_time != null){
+				var diff = start-start_time;
+				betweenkeys_times.push(start-start_time);
+			}
+			start_time = start;			
+			
+		}
+		function end() {
+			var end = new Date();
+			var time = end - start_time;
+			keypress_times.push(time);
+		}
+		function calc() {
+			var avgKeyPress = average(keypress_times);
+			var avgBetweenKeyPress = average(betweenkeys_times);
+			start_time = null;
+			$('#result1').html("Average time for keypress: "+avgKeyPress);
+			$('#result2').html("Average time for between keypress: "+avgBetweenKeyPress);
+		}
+		function average(numbers) {
+    		
+    		var sum = 0;
+			for(var i = 0; i < numbers.length; i++){
+    			sum += parseInt(numbers[i]);
+			}
+			var avg = sum/numbers.length;
+    		return Math.round(avg);
+		}
+$(document).ready(function(){
+	$('#password').keydown(start);
+	$('#password').keyup(end);
+	$('#login').click(calc);
+
+});
+</script>
+</head>
+<body>
+		<input type="text" id="user">
+		<input type="password" id="password">
+		<button id="login">Login</button>
+		<div id="result1"></div>
+		<div id="result2"></div>
+</body>
+</html>
